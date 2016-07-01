@@ -1,4 +1,5 @@
 from hmmlearn.hmm import GMMHMM
+import numpy as np
 import scipy.io.wavfile as wvf
 from features import mfcc
 import os
@@ -57,7 +58,7 @@ def train_GMMs(emotions, trng_data, GMM_config, pickle_path, use_pickle=False):
             emo_machines[emo] = GMMHMM(n_components=GMM_config[emo]["n_components"], n_mix=GMM_config[emo]["n_mix"])
             if trng_data[emo]:
                 # print np.shape(trng_data[emo])
-                emo_machines[emo].fit(trng_data[emo])
+                emo_machines[emo].fit(np.vstack(trng_data[emo]))
         pickle.dump(emo_machines, open(pickle_path, "wb"))
     else:
         emo_machines = pickle.load(open(pickle_path, "rb"))
